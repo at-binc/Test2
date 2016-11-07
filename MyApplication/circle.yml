@@ -1,19 +1,19 @@
 machine:
-ruby:version: 2.0.0-p648
-java:
-version: oraclejdk8
-timezone: Asia/Saigon
-machine:
-environment:
-ANDROID_HOME: /usr/local/android-sdk-linux
+  environment:
+    JAVA_OPTS: "-Xms512m -Xmx768m"
+  timezone: Asia/Saigon
 dependencies:
-override:
-- echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.2,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-support- ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
-#test:
-#  override:
-#      - scripts/saddler.sh
+  cache_directories:
+    - ~/.android
 test:
-override:
- - /bin/true
-- (./gradlew assemble):
-timeout: 360
+  override:
+    - scripts/saddler.sh
+  post:
+    - echo $CIRCLE_TEST_REPORTS
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type d -regex ".*/reports/tests$" -exec cp -r {} $CIRCLE_TEST_REPORTS/junit/ \;
+#deployment:
+#  master:
+#    branch: master
+#    commands:
+#      - ./gradlew assemble uploadDeployGateDebug
