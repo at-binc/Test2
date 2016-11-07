@@ -14,5 +14,6 @@ override:
 #      - scripts/saddler.sh
 test:
 override:
+ - /bin/true
 - (./gradlew assemble):
 timeout: 360
